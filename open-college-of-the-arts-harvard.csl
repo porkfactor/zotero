@@ -3,8 +3,8 @@
   <!-- This style was edited with the Visual CSL Editor (https://editor.citationstyles.org/visualEditor/) -->
   <info>
     <title>Open College of the Arts - Harvard</title>
-    <id>https://github.com/porkfactor/zotero/blob/develop/open-college-of-the-arts-harvard.csl</id>
-    <link href="https://github.com/porkfactor/zotero/blob/develop/open-college-of-the-arts-harvard.csl" rel="self"/>
+    <id>http://www.zotero.org/styles/open-college-of-the-arts-harvard</id>
+    <link href="http://www.zotero.org/styles/open-college-of-the-arts-harvard" rel="self"/>
     <author>
       <name>Dominic Smith</name>
       <email>porkfactor@gmail.com</email>
@@ -12,7 +12,7 @@
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>Open College of the Arts - Harvard</summary>
-    <updated>2022-07-23T17:12:55+00:00</updated>
+    <updated>2022-08-02T19:56:17+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <macro name="editor">
@@ -75,6 +75,9 @@
         <if type="song" match="any">
           <text value="streaming" text-case="capitalize-first" prefix="[" suffix="]"/>
         </if>
+        <else-if type="musical_score" match="any">
+          <text value="music score" text-case="capitalize-first" prefix="[" suffix="]"/>
+        </else-if>
         <else>
           <text term="online" prefix="[" suffix="]." text-case="capitalize-first"/>
         </else>
@@ -102,7 +105,7 @@
   </macro>
   <macro name="title">
     <choose>
-      <if type="bill book graphic legal_case legislation motion_picture report song webpage" match="any">
+      <if type="bill book graphic legal_case legislation motion_picture report song webpage musical_score" match="any">
         <text variable="title" font-style="italic"/>
       </if>
       <else>
@@ -228,14 +231,18 @@
       <choose>
         <if type="song" match="any">
           <group delimiter=" ">
-            <text macro="composer"/>
+            <names variable="composer">
+              <substitute>
+                <text macro="anon"/>
+              </substitute>
+            </names>
             <text macro="year-date" prefix="(" suffix=")"/>
-            <group delimiter=", ">
-              <text macro="performer"/>
-              <text macro="title"/>
+            <group delimiter=". " suffix=". ">
+              <names variable="performer"/>
+              <text variable="title" font-style="normal"/>
+              <text variable="container-title" font-style="italic"/>
+              <text variable="dimensions"/>
             </group>
-            <text macro="container-prefix"/>
-            <group/>
             <text macro="access"/>
           </group>
         </if>
@@ -243,7 +250,7 @@
           <group delimiter=" ">
             <text macro="author"/>
             <text macro="year-date" prefix="(" suffix=")"/>
-            <group delimiter=" " suffix=",">
+            <group suffix=". ">
               <text macro="title"/>
               <text macro="translator" prefix="(" suffix=")"/>
             </group>
