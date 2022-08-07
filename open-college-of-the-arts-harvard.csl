@@ -12,7 +12,7 @@
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>Open College of the Arts - Harvard</summary>
-    <updated>2022-08-02T19:56:17+00:00</updated>
+    <updated>2022-08-07T12:36:34+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <macro name="editor">
@@ -68,40 +68,6 @@
   </macro>
   <macro name="director">
     <names variable="author" prefix="Directed by "/>
-  </macro>
-  <macro name="access">
-    <group delimiter=" ">
-      <choose>
-        <if type="song" match="any">
-          <text value="streaming" text-case="capitalize-first" prefix="[" suffix="]"/>
-        </if>
-        <else-if type="musical_score" match="any">
-          <text value="music score" text-case="capitalize-first" prefix="[" suffix="]"/>
-        </else-if>
-        <else>
-          <text term="online" prefix="[" suffix="]." text-case="capitalize-first"/>
-        </else>
-      </choose>
-      <choose>
-        <if variable="DOI">
-          <text variable="DOI" prefix="DOI: "/>
-        </if>
-        <else>
-          <group delimiter=" ">
-            <text term="at" text-case="capitalize-first" suffix=":"/>
-            <text variable="URL"/>
-          </group>
-        </else>
-      </choose>
-      <group prefix="(" delimiter=" " suffix=").">
-        <text term="accessed" text-case="capitalize-first"/>
-        <date variable="accessed">
-          <date-part name="day" suffix=" "/>
-          <date-part name="month" suffix=" "/>
-          <date-part name="year"/>
-        </date>
-      </group>
-    </group>
   </macro>
   <macro name="title">
     <choose>
@@ -192,6 +158,42 @@
   <macro name="performer">
     <names variable="performer"/>
   </macro>
+  <macro name="URL">
+    <group delimiter=" ">
+      <choose>
+        <if match="any" variable="URL">
+          <text term="at" text-case="capitalize-first" suffix=":"/>
+          <text variable="URL"/>
+          <choose>
+            <if match="any" variable="accessed">
+              <group delimiter=" " prefix="(" suffix=")">
+                <text term="accessed" text-case="capitalize-first"/>
+                <date form="text" variable="accessed"/>
+              </group>
+            </if>
+          </choose>
+        </if>
+      </choose>
+    </group>
+  </macro>
+  <macro name="DOI">
+    <group delimiter=" ">
+      <choose>
+        <if match="any" variable="DOI">
+          <text value="doi" text-case="uppercase" suffix=":"/>
+          <text variable="DOI"/>
+          <choose>
+            <if match="any" variable="accessed">
+              <group delimiter=" " prefix="(" suffix=")">
+                <text term="accessed" text-case="capitalize-first"/>
+                <date form="text" variable="accessed"/>
+              </group>
+            </if>
+          </choose>
+        </if>
+      </choose>
+    </group>
+  </macro>
   <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year">
     <sort>
       <key macro="year-date" sort="descending"/>
@@ -231,21 +233,70 @@
       <choose>
         <if type="song" match="any">
           <group delimiter=" ">
-            <names variable="composer">
-              <substitute>
-                <text macro="anon"/>
-              </substitute>
-            </names>
-            <text macro="year-date" prefix="(" suffix=")"/>
-            <group delimiter=". " suffix=". ">
-              <names variable="performer"/>
+            <group delimiter=" ">
+              <names variable="composer">
+                <substitute>
+                  <text macro="anon"/>
+                </substitute>
+              </names>
+              <text macro="year-date" prefix="(" suffix=")"/>
+            </group>
+            <group delimiter=". " suffix=".">
               <text variable="title" font-style="normal"/>
+              <names variable="performer"/>
               <text variable="container-title" font-style="italic"/>
               <text variable="dimensions"/>
             </group>
-            <text macro="access"/>
+            <group delimiter=". ">
+              <text variable="medium" prefix="[" suffix="]"/>
+              <choose>
+                <if match="any" variable="publisher publisher-place">
+                  <group delimiter=" " suffix=".">
+                    <text variable="publisher-place" suffix=":"/>
+                    <text variable="publisher"/>
+                  </group>
+                </if>
+              </choose>
+              <text macro="URL"/>
+            </group>
           </group>
         </if>
+        <else-if type="musical_score" match="any">
+          <group delimiter=" ">
+            <text macro="author"/>
+            <text macro="year-date" prefix="(" suffix=")"/>
+            <group delimiter=". " suffix=".">
+              <text macro="title"/>
+            </group>
+            <text value="music score" text-case="capitalize-all" prefix="[" suffix="]."/>
+            <choose>
+              <if match="any" variable="publisher publisher-place">
+                <text variable="publisher-place" text-case="capitalize-all" suffix=": "/>
+                <text variable="publisher"/>
+              </if>
+            </choose>
+            <text macro="URL"/>
+          </group>
+        </else-if>
+        <else-if type="broadcast" match="any">
+          <group delimiter=" ">
+            <group delimiter=" ">
+              <text variable="title"/>
+              <text macro="year-date" prefix="(" suffix=")"/>
+            </group>
+            <group delimiter=". ">
+              <text variable="dimensions"/>
+              <text term="radio-broadcast" text-case="capitalize-all" prefix="[" suffix="]"/>
+              <group delimiter=" ">
+                <group delimiter=" ">
+                  <text variable="container-title"/>
+                  <date form="numeric" variable="issued"/>
+                </group>
+                <text macro="URL"/>
+              </group>
+            </group>
+          </group>
+        </else-if>
         <else>
           <group delimiter=" ">
             <text macro="author"/>
@@ -255,7 +306,7 @@
               <text macro="translator" prefix="(" suffix=")"/>
             </group>
             <text macro="container-prefix"/>
-            <group delimiter=", ">
+            <group delimiter=", " suffix=".">
               <text macro="editor"/>
               <text variable="container-title" font-style="italic"/>
               <text variable="collection-title"/>
@@ -266,7 +317,16 @@
               <text macro="published-date"/>
               <text macro="pages"/>
             </group>
-            <text macro="access"/>
+            <choose>
+              <if match="any" variable="DOI">
+                <text term="online" text-case="capitalize-first" prefix="[" suffix="]."/>
+                <text macro="DOI"/>
+              </if>
+              <else-if match="any" variable="URL">
+                <text term="online" text-case="capitalize-first" prefix="[" suffix="]."/>
+                <text macro="URL"/>
+              </else-if>
+            </choose>
           </group>
         </else>
       </choose>
