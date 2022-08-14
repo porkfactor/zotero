@@ -12,7 +12,7 @@
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>Open College of the Arts - Harvard</summary>
-    <updated>2022-08-07T12:36:34+00:00</updated>
+    <updated>2022-08-14T09:58:54+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <macro name="editor">
@@ -263,19 +263,23 @@
         </if>
         <else-if type="musical_score" match="any">
           <group delimiter=" ">
-            <text macro="author"/>
-            <text macro="year-date" prefix="(" suffix=")"/>
+            <group delimiter=" ">
+              <text macro="author"/>
+              <text macro="year-date" prefix="(" suffix=")"/>
+            </group>
             <group delimiter=". " suffix=".">
               <text macro="title"/>
             </group>
-            <text value="music score" text-case="capitalize-all" prefix="[" suffix="]."/>
-            <choose>
-              <if match="any" variable="publisher publisher-place">
-                <text variable="publisher-place" text-case="capitalize-all" suffix=": "/>
-                <text variable="publisher"/>
-              </if>
-            </choose>
-            <text macro="URL"/>
+            <group delimiter=". ">
+              <text value="music score" text-case="capitalize-all" prefix="[" suffix="]"/>
+              <choose>
+                <if match="any" variable="publisher publisher-place">
+                  <text variable="publisher-place" text-case="capitalize-all" suffix=": "/>
+                  <text variable="publisher"/>
+                </if>
+              </choose>
+              <text macro="URL"/>
+            </group>
           </group>
         </else-if>
         <else-if type="broadcast" match="any">
