@@ -12,7 +12,7 @@
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>Open College of the Arts - Harvard</summary>
-    <updated>2023-08-31T09:01:34+00:00</updated>
+    <updated>2023-08-31T10:17:57+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <macro name="editor">
@@ -159,9 +159,9 @@
     <names variable="performer"/>
   </macro>
   <macro name="URL">
-    <group delimiter=" ">
-      <choose>
-        <if match="any" variable="URL">
+    <choose>
+      <if match="any" variable="URL">
+        <group delimiter=" " suffix=".">
           <text term="at" text-case="capitalize-first" suffix=":"/>
           <text variable="URL"/>
           <choose>
@@ -172,9 +172,9 @@
               </group>
             </if>
           </choose>
-        </if>
-      </choose>
-    </group>
+        </group>
+      </if>
+    </choose>
   </macro>
   <macro name="DOI">
     <group delimiter=" ">
@@ -229,11 +229,11 @@
       <key variable="citation-number"/>
       <key variable="title"/>
     </sort>
-    <layout suffix=".">
+    <layout>
       <choose>
         <if type="song" match="any">
-          <group delimiter=". ">
-            <group delimiter=". ">
+          <group delimiter=" " suffix=".">
+            <group delimiter=" ">
               <names variable="composer">
                 <substitute>
                   <text macro="anon"/>
@@ -241,13 +241,13 @@
               </names>
               <text macro="year-date" prefix="(" suffix=")"/>
             </group>
-            <group delimiter=". ">
+            <group delimiter=". " suffix=".">
               <text variable="title" font-style="normal"/>
               <names variable="performer"/>
               <text variable="container-title" font-style="italic"/>
               <text variable="dimensions"/>
             </group>
-            <group delimiter=". ">
+            <group delimiter=" ">
               <text variable="medium" prefix="[" suffix="]"/>
               <choose>
                 <if match="any" variable="publisher publisher-place">
@@ -262,12 +262,12 @@
           </group>
         </if>
         <else-if type="musical_score" match="any">
-          <group delimiter=". ">
+          <group delimiter=" ">
             <group delimiter=" ">
               <text macro="author"/>
               <text macro="year-date" prefix="(" suffix=")"/>
             </group>
-            <group delimiter=". ">
+            <group delimiter=". " suffix=".">
               <text macro="title"/>
             </group>
             <group delimiter=". ">
@@ -283,16 +283,16 @@
           </group>
         </else-if>
         <else-if type="broadcast" match="any">
-          <group delimiter=". ">
+          <group delimiter=" ">
             <group delimiter=" ">
               <text variable="title"/>
               <text macro="year-date" prefix="(" suffix=")"/>
             </group>
-            <group delimiter=". ">
+            <group delimiter=". " suffix=".">
               <text variable="dimensions"/>
               <text term="radio-broadcast" text-case="capitalize-all" prefix="[" suffix="]"/>
             </group>
-            <group delimiter=" ">
+            <group delimiter=" " suffix=".">
               <text variable="container-title"/>
               <date form="numeric" variable="issued"/>
             </group>
@@ -302,22 +302,22 @@
           </group>
         </else-if>
         <else-if type="motion_picture" match="any">
-          <group delimiter=". " suffix=".">
-            <group delimiter=". ">
+          <group delimiter=" ">
+            <group delimiter=" ">
               <text macro="title"/>
               <text macro="year-date" prefix="(" suffix=")"/>
             </group>
-            <group>
+            <group delimiter=". " suffix=".">
               <text macro="director"/>
             </group>
-            <group>
-              <text variable="medium" prefix="[" suffix="]. "/>
+            <group delimiter=" " suffix=".">
+              <text variable="medium" prefix="[" suffix="]"/>
               <text macro="URL"/>
             </group>
           </group>
         </else-if>
         <else>
-          <group delimiter=". " suffix=".">
+          <group delimiter=" ">
             <group delimiter=" ">
               <text macro="author"/>
               <text macro="year-date" prefix="(" suffix=")"/>
@@ -327,7 +327,7 @@
               <text macro="translator" prefix="(" suffix=")"/>
             </group>
             <text macro="container-prefix"/>
-            <group delimiter=", ">
+            <group delimiter=", " suffix=".">
               <text macro="editor"/>
               <text variable="container-title" font-style="italic"/>
               <text variable="collection-title"/>
@@ -340,11 +340,11 @@
             </group>
             <choose>
               <if match="any" variable="DOI">
-                <text term="online" text-case="capitalize-first" prefix="[" suffix="]."/>
+                <text term="online" text-case="capitalize-first" prefix="[" suffix="]"/>
                 <text macro="DOI"/>
               </if>
               <else-if match="any" variable="URL">
-                <text term="online" text-case="capitalize-first" prefix="[" suffix="]."/>
+                <text term="online" text-case="capitalize-first" prefix="[" suffix="]"/>
                 <text macro="URL"/>
               </else-if>
             </choose>
