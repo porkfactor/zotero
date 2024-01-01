@@ -12,7 +12,7 @@
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>Open College of the Arts - Harvard</summary>
-    <updated>2023-08-31T10:17:57+00:00</updated>
+    <updated>2024-01-01T11:57:12+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <macro name="editor">
@@ -62,7 +62,7 @@
   </macro>
   <macro name="translator">
     <names variable="translator">
-      <label form="short" plural="always" suffix=" "/>
+      <label form="verb" plural="always" text-case="capitalize-first" suffix=" "/>
       <name and="symbol" delimiter=", " delimiter-precedes-last="never" initialize-with=". "/>
     </names>
   </macro>
@@ -71,7 +71,7 @@
   </macro>
   <macro name="title">
     <choose>
-      <if type="bill book graphic legal_case legislation motion_picture report song webpage musical_score" match="any">
+      <if type="bill book graphic legal_case legislation motion_picture report song webpage musical_score thesis" match="any">
         <text variable="title" font-style="italic"/>
       </if>
       <else>
@@ -80,8 +80,8 @@
     </choose>
   </macro>
   <macro name="publisher">
-    <group delimiter=", ">
-      <text variable="publisher-place"/>
+    <group delimiter=" ">
+      <text variable="publisher-place" suffix=":"/>
       <text variable="publisher"/>
     </group>
   </macro>
@@ -122,7 +122,7 @@
   <macro name="pages">
     <choose>
       <if type="chapter paper-conference article-journal" match="any">
-        <label variable="page" form="short" suffix=" "/>
+        <label variable="page" form="short"/>
         <text variable="page"/>
       </if>
     </choose>
@@ -194,6 +194,12 @@
       </choose>
     </group>
   </macro>
+  <macro name="publisher">
+    <group delimiter=" " suffix=".">
+      <text variable="publisher-place" suffix=":"/>
+      <text variable="publisher"/>
+    </group>
+  </macro>
   <citation et-al-min="3" et-al-use-first="1" disambiguate-add-year-suffix="true" disambiguate-add-names="true" disambiguate-add-givenname="true" collapse="year">
     <sort>
       <key macro="year-date" sort="descending"/>
@@ -232,7 +238,7 @@
     <layout>
       <choose>
         <if type="song" match="any">
-          <group delimiter=" " suffix=".">
+          <group delimiter=". " suffix=".">
             <group delimiter=" ">
               <names variable="composer">
                 <substitute>
@@ -240,46 +246,38 @@
                 </substitute>
               </names>
               <text macro="year-date" prefix="(" suffix=")"/>
-            </group>
-            <group delimiter=". " suffix=".">
               <text variable="title" font-style="normal"/>
-              <names variable="performer"/>
-              <text variable="container-title" font-style="italic"/>
-              <text variable="dimensions"/>
             </group>
+            <names variable="performer"/>
+            <text variable="container-title" font-style="italic"/>
+            <text variable="dimensions"/>
             <group delimiter=" ">
               <text variable="medium" prefix="[" suffix="]"/>
               <choose>
                 <if match="any" variable="publisher publisher-place">
-                  <group delimiter=" " suffix=".">
-                    <text variable="publisher-place" suffix=":"/>
-                    <text variable="publisher"/>
-                  </group>
+                  <text macro="publisher"/>
                 </if>
               </choose>
-              <text macro="URL"/>
             </group>
+            <text macro="URL"/>
           </group>
         </if>
         <else-if type="musical_score" match="any">
-          <group delimiter=" ">
+          <group delimiter=". " suffix=".">
             <group delimiter=" ">
               <text macro="author"/>
               <text macro="year-date" prefix="(" suffix=")"/>
-            </group>
-            <group delimiter=". " suffix=".">
               <text macro="title"/>
             </group>
             <group delimiter=". ">
               <text value="music score" text-case="capitalize-all" prefix="[" suffix="]"/>
               <choose>
                 <if match="any" variable="publisher publisher-place">
-                  <text variable="publisher-place" text-case="capitalize-all" suffix=": "/>
-                  <text variable="publisher"/>
+                  <text macro="publisher"/>
                 </if>
               </choose>
-              <text macro="URL"/>
             </group>
+            <text macro="URL"/>
           </group>
         </else-if>
         <else-if type="broadcast" match="any">
@@ -316,23 +314,40 @@
             </group>
           </group>
         </else-if>
+        <else-if type="thesis" match="any">
+          <group delimiter=". " suffix=".">
+            <group delimiter=" ">
+              <text macro="author"/>
+              <text macro="year-date"/>
+              <text macro="title"/>
+            </group>
+            <group/>
+            <group delimiter=" ">
+              <text term="thesis" text-case="capitalize-first" prefix="[" suffix="]"/>
+              <text variable="publisher"/>
+            </group>
+            <text macro="URL"/>
+          </group>
+        </else-if>
         <else>
-          <group delimiter=" ">
+          <group delimiter=". " suffix=".">
             <group delimiter=" ">
               <text macro="author"/>
               <text macro="year-date" prefix="(" suffix=")"/>
-            </group>
-            <group>
               <text macro="title"/>
-              <text macro="translator" prefix="(" suffix=")"/>
+            </group>
+            <group delimiter=". ">
+              <text macro="translator"/>
             </group>
             <text macro="container-prefix"/>
-            <group delimiter=", " suffix=".">
+            <group delimiter=", ">
               <text macro="editor"/>
               <text variable="container-title" font-style="italic"/>
               <text variable="collection-title"/>
-              <text variable="genre"/>
+              <text variable="genre" prefix="[" suffix="]"/>
               <text macro="edition"/>
+            </group>
+            <group delimiter=" ">
               <text macro="publisher"/>
               <text macro="locators"/>
               <text macro="published-date"/>
